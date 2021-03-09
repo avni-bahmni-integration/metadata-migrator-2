@@ -15,18 +15,22 @@ public class ConnectionFactory {
     @Autowired
     private BahmniConfig bahmniConfig;
 
-    public Connection createMySQLConnection() throws JSchException, ClassNotFoundException, SQLException {
-        JSch jsch = new JSch();
-        jsch.addIdentity(bahmniConfig.getSshPrivateKey());
-        Session session = jsch.getSession(bahmniConfig.getSshUser(), bahmniConfig.getSshHost(), bahmniConfig.getSshPort());
-        session.setConfig("StrictHostKeyChecking", "no");
-        session.connect();
-        session.setPortForwardingL(bahmniConfig.getLocalPort(), bahmniConfig.getOpenMrsMySqlServerFromSSHHost(), bahmniConfig.getOpenMrsMySqlPort());
+    public Connection createMySQLConnection() {
+        try {
+            JSch jsch = new JSch();
+            jsch.addIdentity(bahmniConfig.getSshPrivateKey());
+            Session session = jsch.getSession(bahmniConfig.getSshUser(), bahmniConfig.getSshHost(), bahmniConfig.getSshPort());
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
+            session.setPortForwardingL(bahmniConfig.getLocalPort(), bahmniConfig.getOpenMrsMySqlServerFromSSHHost(), bahmniConfig.getOpenMrsMySqlPort());
 
-        String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://" + bahmniConfig.getOpenMrsMySqlServerFromSSHHost() + ":" + bahmniConfig.getLocalPort() + "/";
+            String driver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://" + bahmniConfig.getOpenMrsMySqlServerFromSSHHost() + ":" + bahmniConfig.getLocalPort() + "/";
 
-        Class.forName(driver);
-        return DriverManager.getConnection(url + bahmniConfig.getOpenMrsMySqlDatabase(), bahmniConfig.getOpenMrsMySqlUser(), bahmniConfig.getOpenMrsMySqlPassword());
+            Class.forName(driver);
+            return DriverManager.getConnection(url + bahmniConfig.getOpenMrsMySqlDatabase(), bahmniConfig.getOpenMrsMySqlUser(), bahmniConfig.getOpenMrsMySqlPassword());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
