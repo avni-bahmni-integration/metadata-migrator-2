@@ -1,7 +1,6 @@
 package org.avni_bahmni_integration.migrator.service;
 
 import org.avni_bahmni_integration.migrator.ConnectionFactory;
-import org.avni_bahmni_integration.migrator.domain.OpenMRSConcept;
 import org.avni_bahmni_integration.migrator.domain.OpenMRSForm;
 import org.avni_bahmni_integration.migrator.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class OpenMRSService {
     public void addConceptsToForms(List<OpenMRSForm> formList) {
         Connection mySQLConnection = null;
         try {
-            mySQLConnection = connectionFactory.createMySQLConnection();
+            mySQLConnection = connectionFactory.getMySqlConnection();
             PreparedStatement preparedStatement = mySQLConnection.prepareStatement(FileUtil.readFile("form-elements.sql"));
             for (OpenMRSForm form : formList) {
                 preparedStatement.setInt(1, form.getFormId());

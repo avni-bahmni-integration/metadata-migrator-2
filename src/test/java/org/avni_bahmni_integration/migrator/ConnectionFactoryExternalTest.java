@@ -14,8 +14,14 @@ class ConnectionFactoryExternalTest {
     private ConnectionFactory connectionFactory;
 
     @Test
-    public void connect() throws JSchException, SQLException, ClassNotFoundException {
-        Connection mySQLConnection = connectionFactory.createMySQLConnection();
+    public void connectToOpenMRSDb() throws SQLException {
+        Connection mySQLConnection = connectionFactory.getMySqlConnection();
         mySQLConnection.close();
+    }
+
+    @Test
+    public void connectToAvniDb() throws SQLException {
+        Connection avniConnection = connectionFactory.getAvniConnection();
+        avniConnection.close();
     }
 }
