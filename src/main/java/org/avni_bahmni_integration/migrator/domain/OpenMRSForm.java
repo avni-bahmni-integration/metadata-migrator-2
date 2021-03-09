@@ -6,6 +6,8 @@ import java.util.List;
 public class OpenMRSForm {
     private int formId;
     private String formName;
+    private String type;
+
     private List<OpenMRSConcept> concepts = new ArrayList<>();
 
     public int getFormId() {
@@ -31,5 +33,13 @@ public class OpenMRSForm {
 
     public List<OpenMRSConcept> getConcepts() {
         return concepts;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Statement;
 
 @Component
 public class ConnectionFactory {
@@ -49,7 +50,11 @@ public class ConnectionFactory {
             String url = "jdbc:postgresql://localhost:" + avniConfig.getLocalPort() + "/";
 
             Class.forName(driver);
-            return DriverManager.getConnection(url + avniConfig.getAvniPostgresDatabase(), avniConfig.getAvniPosgresUser(), avniConfig.getAvniPostgresPassword());
+            Connection connection = DriverManager.getConnection(url + avniConfig.getAvniPostgresDatabase(), avniConfig.getAvniPosgresUser(), avniConfig.getAvniPostgresPassword());
+            Statement statement = connection.createStatement();
+            statement.execute("set role bahmni_ashwini_integration");
+            statement.close();
+            return connection;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

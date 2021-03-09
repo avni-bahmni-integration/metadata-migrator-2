@@ -17,10 +17,8 @@ public class OpenMRSService {
     @Autowired
     private ConnectionFactory connectionFactory;
 
-    public void addConceptsToForms(List<OpenMRSForm> formList) {
-        Connection mySQLConnection = null;
-        try {
-            mySQLConnection = connectionFactory.getMySqlConnection();
+    public void addConceptsToForms(List<OpenMRSForm> formList) throws SQLException {
+        try (Connection mySQLConnection = connectionFactory.getMySqlConnection()) {
             PreparedStatement preparedStatement = mySQLConnection.prepareStatement(FileUtil.readFile("form-elements.sql"));
             for (OpenMRSForm form : formList) {
                 preparedStatement.setInt(1, form.getFormId());
@@ -34,13 +32,8 @@ public class OpenMRSService {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
-        } finally {
-            try {
-                mySQLConnection.close();
-            } catch (SQLException ee) {
-                throw new RuntimeException(ee);
-            }
         }
     }
 }

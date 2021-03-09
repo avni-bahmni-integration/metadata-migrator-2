@@ -1,26 +1,32 @@
 [
   {
     "formId": 122,
-    "formName": "Vitals (Hospital)"
+    "formName": "Vitals (Hospital)",
+    "type": "Encounter"
   },
   {
     "formId": 154,
-    "formName": "History and Examination (Hospital)"
+    "formName": "History and Examination (Hospital)",
+    "type": "Encounter"
   },
   {
     "formId": 143,
-    "formName": "Discharge Summary (Hospital)"
+    "formName": "Discharge Summary (Hospital)",
+    "type": "Encounter"
   },
   {
     "formId": 3026,
-    "formName": "Procedure Notes (Hospital)"
+    "formName": "Procedure Notes (Hospital)",
+    "type": "Encounter"
   },
   {
     "formId": 2973,
-    "formName": "Operative Notes (Hospital)"
+    "formName": "Operative Notes (Hospital)",
+    "type": "Encounter"
   },
   {
     "formId": 3048,
-    "formName": "General Ultrasound Note (Hospital)"
+    "formName": "General Ultrasound Note (Hospital)",
+    "type": "Encounter"
   }
 ]

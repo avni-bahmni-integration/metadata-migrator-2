@@ -24,6 +24,10 @@ public class OpenMRSConcept {
         return name;
     }
 
+    public String getAvniConceptName() {
+        return String.format("%s [Bahmni]", getName());
+    }
+
     public void setName(String name) {
         this.name = name;
     }
