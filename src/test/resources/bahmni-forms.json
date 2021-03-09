@@ -28,5 +28,35 @@
     "formId": 3048,
     "formName": "General Ultrasound Note (Hospital)",
     "type": "Encounter"
+  },
+  {
+    "formId": 1745,
+    "formName": "ANC (Hospital)",
+    "type": "ProgramEncounter",
+    "program": "Mother"
+  },
+  {
+    "formId": 5004,
+    "formName": "Antenatal review (Hospital)",
+    "type": "ProgramEncounter",
+    "program": "Mother"
+  },
+  {
+    "formId": 1983,
+    "formName": "Delivery note (Hospital)",
+    "type": "ProgramEncounter",
+    "program": "Mother"
+  },
+  {
+    "formId": 5172,
+    "formName": "Obstetric ultrasound (Hospital)",
+    "type": "ProgramEncounter",
+    "program": "Mother"
+  },
+  {
+    "formId": 5172,
+    "formName": "New born screening (Hospital)",
+    "type": "ProgramEncounter",
+    "program": "Child"
   }
 ]

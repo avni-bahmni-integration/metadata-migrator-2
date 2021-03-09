@@ -16,7 +16,7 @@ import java.util.List;
 public class AvniRepository {
     @Autowired
     private ConnectionFactory connectionFactory;
-    private static Logger logger = Logger.getLogger(AvniRepository.class);
+    private static final Logger logger = Logger.getLogger(AvniRepository.class);
 
     public void createForms(List<OpenMRSForm> forms) throws SQLException {
         Connection connection = connectionFactory.getAvniConnection();
@@ -26,13 +26,15 @@ public class AvniRepository {
             String formInsert = "insert into form (name, form_type, uuid, version, audit_id, organisation_id) values (?, ?, uuid_generate_v4(), 0, create_audit(), (select id from organisation))";
             String formElementGroupInsert = "insert into form_element_group (name, form_id, uuid, version, audit_id, organisation_id) values (?, (select id from form where name = ?), uuid_generate_v4(), 0, create_audit(), (select id from organisation))";
             String formElementInsert = "insert into form_element (name, display_order, concept_id, form_element_group_id, uuid, version, audit_id, organisation_id)  values (?, ?, (select id from concept where name = ?), (select id from form_element_group where name = ?), uuid_generate_v4(), 0, create_audit(), (select id from organisation))";
-            String formMappingInsert = "insert into form_mapping (form_id, uuid, version, observations_type_entity_id, subject_type_id, audit_id, organisation_id) values ((select id from form where name = ?), uuid_generate_v4(), 0, (select id from encounter_type where name = ?), (select id from subject_type where name = 'Individual'), create_audit(), (select id from organisation))";
+            String encounterFormMappingInsert = "insert into form_mapping (form_id, uuid, version, observations_type_entity_id, subject_type_id, audit_id, organisation_id) values ((select id from form where name = ?), uuid_generate_v4(), 0, (select id from encounter_type where name = ?), (select id from subject_type where name = 'Individual'), create_audit(), (select id from organisation))";
+            String programEncounterFormMappingInsert = "insert into form_mapping (form_id, uuid, version, observations_type_entity_id, subject_type_id, audit_id, organisation_id, entity_id) values ((select id from form where name = ?), uuid_generate_v4(), 0, (select id from encounter_type where name = ?), (select id from subject_type where name = 'Individual'), create_audit(), (select id from organisation), (select id from program where name = ?))";
 
             PreparedStatement encounterTypePS = connection.prepareStatement(encounterTypeInsert);
             PreparedStatement formInsertPS = connection.prepareStatement(formInsert);
             PreparedStatement formElementGroupPS = connection.prepareStatement(formElementGroupInsert);
             PreparedStatement formElementPS = connection.prepareStatement(formElementInsert);
-            PreparedStatement formMappingPS = connection.prepareStatement(formMappingInsert);
+            PreparedStatement encounterFormMappingPS = connection.prepareStatement(encounterFormMappingInsert);
+            PreparedStatement programEncounterFormMappingPS = connection.prepareStatement(programEncounterFormMappingInsert);
 
             for (OpenMRSForm form : forms) {
                 encounterTypePS.setString(1, form.getFormName());
@@ -60,16 +62,24 @@ public class AvniRepository {
                 }
                 logger.info("Created form elements for form: " + form.getFormName());
 
-                formMappingPS.setString(1, form.getFormName());
-                formMappingPS.setString(2, form.getFormName());
-                formMappingPS.executeUpdate();
-                logger.info("Created form mapping for form: " + form.getFormName());
+                if (form.getProgram() == null) {
+                    encounterFormMappingPS.setString(1, form.getFormName());
+                    encounterFormMappingPS.setString(2, form.getFormName());
+                    encounterFormMappingPS.executeUpdate();
+                    logger.info("Created encounter form mapping for form: " + form.getFormName());
+                } else {
+                    programEncounterFormMappingPS.setString(1, form.getFormName());
+                    programEncounterFormMappingPS.setString(2, form.getFormName());
+                    programEncounterFormMappingPS.setString(3, form.getProgram());
+                    programEncounterFormMappingPS.executeUpdate();
+                    logger.info("Created program encounter form mapping for form: " + form.getFormName());
+                }
             }
             encounterTypePS.close();
             formInsertPS.close();
             formElementGroupPS.close();
             formElementPS.close();
-            formMappingPS.close();
+            encounterFormMappingPS.close();
 
             connection.rollback();
         } catch (Exception e) {

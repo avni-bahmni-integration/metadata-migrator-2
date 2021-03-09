@@ -7,6 +7,7 @@ public class OpenMRSForm {
     private int formId;
     private String formName;
     private String type;
+    private String program;
 
     private List<OpenMRSConcept> concepts = new ArrayList<>();
 
@@ -41,5 +42,13 @@ public class OpenMRSForm {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setProgram(String program) {
+        this.program = program;
+    }
+
+    public String getProgram() {
+        return program;
     }
 }
